@@ -1,5 +1,5 @@
 
-from multiprocessing.sharedctypes import Value
+from datetime import datetime
 import openpyxl
 from textwrap import fill
 from openpyxl import Workbook
@@ -9,30 +9,32 @@ from openpyxl.styles import Font, Color, colors, Side, GradientFill, Alignment, 
 
 class WorksheetMaycao:
     def __init__(self, args):
-        self.nomeAluno = args["nomeAluno"]
+        self.nomeAluno    = args["nomeAluno"]
         self.workbookName = args["workbookName"]
-        self.objetivo = args["objetivo"]
+        self.objetivo     = args["objetivo"]
         self.diasDaSemana = args["diasDaSemana"]
-        self.observacao = args["observacao"]
+        self.observacao   = args["observacao"]
         self.dataDeInicio = args["dataDeInicio"]
-        self.treinos = args['treinos']
-        self.tipoTreino = args['tipoTreino']
-        self.workbook = 0
-        self.worksheet = 0
+        self.treinos      = args['treinos']
+        self.tipoTreino   = args['tipoTreino']
+        self.posTreino    = args['posTreino']
+        self.workbook     = 0
+        self.worksheet    = 0
+        self.lastLineOfEexercicio = 0
 
     def createSheet(self):
-        self.workbook = Workbook()
+        self.workbook  = Workbook()
         self.worksheet = self.workbook.active
         self.worksheet.title = self.workbookName   
 
     def setDimensions(self):
-        self.worksheet.column_dimensions['A'].width = 15 
-        self.worksheet.column_dimensions['B'].width = 25 
+        self.worksheet.column_dimensions['A'].width = 5 
+        self.worksheet.column_dimensions['B'].width = 35 
         self.worksheet.column_dimensions['C'].width = 15 
-        self.worksheet.column_dimensions['D'].width = 15 
-        self.worksheet.column_dimensions['E'].width = 15 
-        self.worksheet.column_dimensions['F'].width = 10 
-        self.worksheet.column_dimensions['G'].width = 25 
+        self.worksheet.column_dimensions['D'].width = 25 
+        self.worksheet.column_dimensions['E'].width = 10 
+        self.worksheet.column_dimensions['F'].width = 7 
+        self.worksheet.column_dimensions['G'].width = 30 
         self.worksheet.column_dimensions['A'].height = 25
         self.worksheet.column_dimensions['B'].height = 25
         self.worksheet.column_dimensions['C'].height = 25
@@ -42,78 +44,64 @@ class WorksheetMaycao:
         self.worksheet.column_dimensions['G'].height = 25
 
     def appendDadosAluno(self): 
-        self.worksheet['A1'] = "Aluno:"
-        self.worksheet['A2'] = "Data de Ínicio:"
-        self.worksheet['A3'] = "Objetivo:"
-        self.worksheet['A4'] = "Dias da semana:"
-        self.worksheet['A5'] = "Observação:"
-        self.worksheet['A6'] = "Treino:"
-        self.worksheet['B1'] = self.nomeAluno
-        self.worksheet['B2'] = self.dataDeInicio
-        self.worksheet['B3'] = self.objetivo
-        self.worksheet['B4'] = self.diasDaSemana
-        self.worksheet['B5'] = self.observacao
-        self.worksheet['B6'] = self.tipoTreino
+        self.worksheet['C1'] = "Aluno:"
+        self.worksheet['C2'] = "Data de Ínicio:"
+        self.worksheet['C3'] = "Objetivo:"
+        self.worksheet['C4'] = "Dias da semana:"
+        self.worksheet['C5'] = "Observação:"
+        self.worksheet['C6'] = "Treino:"
+        self.worksheet['D1'] = self.nomeAluno
+        self.worksheet['D2'] = self.dataDeInicio
+        self.worksheet['D3'] = self.objetivo
+        self.worksheet['D4'] = self.diasDaSemana
+        self.worksheet['D5'] = self.observacao
+        self.worksheet['D6'] = self.tipoTreino
     
     def stylesDadosAluno(self):
         key_font = Font(color='00FFFFFF')
         key_fill = PatternFill("solid", fgColor="00969696")
         key_alignment = Alignment(horizontal="right", vertical="center")     
-        self.worksheet['A1'].border = Border(top = Side(border_style="thick", color="00000000"),
+        self.worksheet['C1'].border = Border(top = Side(border_style="thick", color="00000000"),
         left = Side(border_style="thick", color="00000000"))
-        self.worksheet['A2'].border = Border(left = Side(border_style="thick", color="00000000"))
-        self.worksheet['A3'].border = Border(left = Side(border_style="thick", color="00000000"))
-        self.worksheet['A4'].border = Border(left = Side(border_style="thick", color="00000000"))
-        self.worksheet['A5'].border = Border(left = Side(border_style="thick", color="00000000"))
-        self.worksheet['A6'].border = Border(left = Side(border_style="thick", color="00000000"),
-        bottom = Side(border_style="thick", color="00000000"))
-        self.worksheet['B1'].border = Border(top = Side(border_style="thick", color="00000000"),
-        right = Side(border_style="thick", color="00000000"))
-        self.worksheet['B2'].border = Border(right = Side(border_style="thick", color="00000000"))
-        self.worksheet['B3'].border = Border(right = Side(border_style="thick", color="00000000"))
-        self.worksheet['B4'].border = Border(right = Side(border_style="thick", color="00000000"))
-        self.worksheet['B5'].border = Border(right = Side(border_style="thick", color="00000000"))
-        self.worksheet['B6'].border = Border(right = Side(border_style="thick", color="00000000"),
-        bottom = Side(border_style="thick", color="00000000"))
-        self.worksheet['A1'].fill = key_fill
-        self.worksheet['A2'].fill = key_fill
-        self.worksheet['A3'].fill = key_fill
-        self.worksheet['A4'].fill = key_fill
-        self.worksheet['A5'].fill = key_fill
-        self.worksheet['A6'].fill = key_fill
-        self.worksheet['A1'].font = key_font
-        self.worksheet['A2'].font = key_font
-        self.worksheet['A3'].font = key_font
-        self.worksheet['A4'].font = key_font
-        self.worksheet['A5'].font = key_font
-        self.worksheet['A6'].font = key_font
-        self.worksheet['A1'].alignment  = key_alignment 
-        self.worksheet['A2'].alignment  = key_alignment 
-        self.worksheet['A3'].alignment  = key_alignment 
-        self.worksheet['A4'].alignment  = key_alignment 
-        self.worksheet['A5'].alignment  = key_alignment 
-        self.worksheet['A6'].alignment  = key_alignment 
+        self.worksheet['C2'].border = Border(left = Side(border_style="thick", color="00000000"))
+        self.worksheet['C3'].border = Border(left = Side(border_style="thick", color="00000000"))
+        self.worksheet['C4'].border = Border(left = Side(border_style="thick", color="00000000"))
+        self.worksheet['C5'].border = Border(left = Side(border_style="thick", color="00000000"))
+
+        
+
+        self.worksheet['D2'].border = Border(right = Side(border_style="thick", color="00000000"))
+        self.worksheet['D3'].border = Border(right = Side(border_style="thick", color="00000000"))
+        self.worksheet['D4'].border = Border(right = Side(border_style="thick", color="00000000"))
+        self.worksheet['D5'].border = Border(right = Side(border_style="thick", color="00000000"))
+
+        self.worksheet['C6'].border = Border(left = Side(border_style="thick", color="00000000"),
+                                            bottom = Side(border_style="thick", color="00000000"))
+        self.worksheet['D1'].border = Border(top = Side(border_style="thick", color="00000000"),
+                                            right = Side(border_style="thick", color="00000000"))
+        self.worksheet['D6'].border = Border(right = Side(border_style="thick", color="00000000"),
+                                                        bottom = Side(border_style="thick", color="00000000"))
+
+        count = 1
+        while count < 7:
+            cel = 'C' + str(count)
+            print(cel)
+            self.worksheet[cel].font = key_font
+            self.worksheet[cel].fill = key_fill
+            self.worksheet[cel].alignment = key_alignment
+            count = count + 1
+
         value_font = Font(color='00000000', bold=True)
         value_fill = PatternFill("solid", fgColor="00FFFFFF")
         value_alignment = Alignment(horizontal="center", vertical="center")
-        self.worksheet['B1'].font = value_font
-        self.worksheet['B2'].font = value_font
-        self.worksheet['B3'].font = value_font
-        self.worksheet['B4'].font = value_font
-        self.worksheet['B5'].font = value_font
-        self.worksheet['B6'].font = value_font
-        self.worksheet['B1'].fill = value_fill
-        self.worksheet['B2'].fill = value_fill
-        self.worksheet['B3'].fill = value_fill
-        self.worksheet['B4'].fill = value_fill
-        self.worksheet['B5'].fill = value_fill
-        self.worksheet['B6'].fill = value_fill
-        self.worksheet['B1'].alignment = value_alignment
-        self.worksheet['B2'].alignment = value_alignment
-        self.worksheet['B3'].alignment = value_alignment
-        self.worksheet['B4'].alignment = value_alignment
-        self.worksheet['B5'].alignment = value_alignment
-        self.worksheet['B6'].alignment = value_alignment
+
+        count = 1
+        while count < 7:
+            cel = 'D' + str(count)
+            self.worksheet[cel].font = value_font
+            self.worksheet[cel].fill = value_fill
+            self.worksheet[cel].alignment = value_alignment
+            count = count + 1
 
     def appendExercicios(self):
         startingCelLine = 7
@@ -155,59 +143,89 @@ class WorksheetMaycao:
             self.worksheet.merge_cells('H' + str(treinoStartingCelLineCopy) + ':H' + str(columnNumber))
             self.worksheet['H' + str(treinoStartingCelLineCopy)].alignment = Alignment(horizontal="center", vertical="center")
             self.worksheet['H' + str(treinoStartingCelLineCopy)].fill = PatternFill("solid", fgColor="00333333")
-            print('aqui')
+            print('\tAdicionei um exercicio \n \n')
             self.worksheet['H' + str(treinoStartingCelLineCopy)].font = Font(color='00FFFF00',size=20)
-            self.worksheet['H' + str(treinoStartingCelLineCopy)] = treino.dia       
+            self.worksheet['H' + str(treinoStartingCelLineCopy)] = treino.dia  
+        self.lastLineOfEexercicio = int(columnNumber)     
 
-    def styleExercicioRows(self, columnNumber) : 
+    def styleExercicioRows(self, line) : 
         alignment = Alignment(horizontal="center", vertical="center")
-        self.worksheet['A' + columnNumber].alignment = alignment
-        self.worksheet['B' + columnNumber].alignment = alignment
-        self.worksheet['C' + columnNumber].alignment = alignment
-        self.worksheet['D' + columnNumber].alignment = alignment
-        self.worksheet['E' + columnNumber].alignment = alignment
-        self.worksheet['F' + columnNumber].alignment = alignment
-        self.worksheet['G' + columnNumber].alignment = alignment
-        self.worksheet['H' + columnNumber].alignment = alignment
-        
-        self.worksheet['H' + columnNumber].font = Font(color='00FFFF00',size=20)
+        coluns = ['A','B','C','D','E','F','G', 'H']
+        for column in coluns : 
+            self.worksheet[column + line].alignment = alignment
+        self.worksheet['H' + line].font = Font(color='00FFFF00',size=20)
 
-    def styleExercicioColumns(self, columnNumber) :
+    def styleExercicioColumns(self, line) :
         fill = PatternFill("solid", fgColor="00333333")
         font = Font(color='00FFFF00')
         alignment = Alignment(horizontal="center", vertical="center")
-        self.worksheet['A' + columnNumber].fill = fill
-        self.worksheet['B' + columnNumber].fill = fill
-        self.worksheet['C' + columnNumber].fill = fill
-        self.worksheet['D' + columnNumber].fill = fill
-        self.worksheet['E' + columnNumber].fill = fill
-        self.worksheet['F' + columnNumber].fill = fill
-        self.worksheet['G' + columnNumber].fill = fill
-        self.worksheet['A' + columnNumber].font = font
-        self.worksheet['B' + columnNumber].font = font
-        self.worksheet['C' + columnNumber].font = font
-        self.worksheet['D' + columnNumber].font = font
-        self.worksheet['E' + columnNumber].font = font
-        self.worksheet['F' + columnNumber].font = font
-        self.worksheet['G' + columnNumber].font = font
-        self.worksheet['H' + columnNumber].font = font
-        self.worksheet['A' + columnNumber].alignment = alignment
-        self.worksheet['B' + columnNumber].alignment = alignment
-        self.worksheet['C' + columnNumber].alignment = alignment
-        self.worksheet['D' + columnNumber].alignment = alignment
-        self.worksheet['E' + columnNumber].alignment = alignment
-        self.worksheet['F' + columnNumber].alignment = alignment
-        self.worksheet['G' + columnNumber].alignment = alignment
-        self.worksheet['H' + columnNumber].alignment = alignment
+        coluns = ['A','B','C','D','E','F','G', 'H']
+        
+        for column in coluns:
+            if(column != 'H'):
+                self.worksheet[column + line].fill = fill
+            self.worksheet[column + line].font = font
+            self.worksheet[column + line].alignment = alignment
+        
                 
+    def appendPosTreino(self):
+        startingLine = self.lastLineOfEexercicio + 3;
+        count = startingLine;
+        endLine = startingLine + len(self.posTreino)
+        titleCel = 'A' + str( startingLine - 1 )  
+        self.worksheet[titleCel] = 'PÓS TREINO TODOS OS DIAS'
+        
+        while count != endLine :
+            cellCount = 'A' + str(count)
+            cellNome  = 'B' + str(count) 
+            cellLink  = 'C' + str(count) 
+            exercicio = self.posTreino[count - 45]
+            self.worksheet[cellCount] = count - 44
+            self.worksheet[cellNome] = exercicio['nome']
+            self.worksheet[cellLink].hyperlink = exercicio['link']
+            self.worksheet[cellLink].value = ''
+            img = openpyxl.drawing.image.Image('./ytb.png')
+            img.width = 20
+            img.height = 20
+            img.anchor = cellLink
+            self.worksheet.add_image(img)
+            count = count + 1
+        print('\tAdicionei o pos trieno')
+
+        return 1;
+
+    def stylePosTreino(self):
+        startingLine = self.lastLineOfEexercicio + 2;
+        count = startingLine
+        endLine = startingLine + 1 + len(self.posTreino)
+        fill = PatternFill("solid", fgColor="00333333")
+        font = Font(color='00FFFF00')
+        alignment = Alignment(horizontal="center", vertical="center")
+        coluns = ['A','B','C']
+        for colunm in coluns : 
+            self.worksheet[colunm + str(startingLine)].fill = fill
+            self.worksheet[colunm + str(startingLine)].font = font
+            self.worksheet[colunm + str(startingLine)].alignment = alignment
+
+        while count != endLine:
+            celA = "A" + str(count)
+            celB = 'B' + str(count)
+            celC = 'D' + str(count)
+            self.worksheet[celA].alignment = alignment
+            self.worksheet[celB].alignment = alignment
+            self.worksheet[celC].alignment = alignment
+            count = count + 1
+        self.worksheet.merge_cells('A' + str(startingLine) + ":C" + str(startingLine))
+       
+
 class Exercicio: 
     def __init__(self, args):
         self.nomeExercicio = args["nomeExercicio"]
-        self.series = args["series"]
-        self.repeticoes = args["repeticoes"]
-        self.descanso = args["descanso"]
-        self.linkVideo = args["linkVideo"]
-        self.observacao = args["observacao"]
+        self.series        = args["series"]
+        self.repeticoes    = args["repeticoes"]
+        self.descanso      = args["descanso"]
+        self.linkVideo     = args["linkVideo"]
+        self.observacao    = args["observacao"]
 
 class Treino:
     def __init__(self, args):
@@ -487,15 +505,21 @@ def main():
         ]
     }
     
-    
-    
-
     treinoA = Treino(exerciciosSegunda)
     treinoB = Treino(exerciciosTerca)
     treinoC = Treino(exerciciosQuarta)
     treinoD = Treino(exerciciosQuinta)
     treinoE = Treino(exerciciosSexta)
     treinos = [treinoA,treinoB,treinoC,treinoD,treinoE]
+    posTreino = [
+        {"nome":"30 MIN ESTEIRA ( VELOCIDADE MINIMA 6.0 )", "link":"https://www.youtube.com/watch?v=fR_KzGyKW3w&t=25s"},
+        {"nome":"ABDOMINAL BICICLETA 3X40SEG", "link":"https://www.youtube.com/watch?v=fR_KzGyKW3w&t=25s"},
+        {"nome":"5MIN CORRENDO ESTEIRA", "link":"https://www.youtube.com/watch?v=fR_KzGyKW3w&t=25s"},
+        {"nome":"ABDOMINAL CRUNCH 3X25", "link":"https://www.youtube.com/watch?v=fR_KzGyKW3w&t=25s"},
+        {"nome":"ELEVAÇÃO DE PERNAS 3X10", "link":"https://www.youtube.com/watch?v=fR_KzGyKW3w&t=25s"},
+        {"nome":"PRANCHA ISOMETRICA 3XRM", "link":"https://www.youtube.com/watch?v=fR_KzGyKW3w&t=25s"},
+        {"nome":"GIRO RUSSO 3X50SEG", "link":"https://www.youtube.com/watch?v=fR_KzGyKW3w&t=25s"},
+    ]
 
     args = {
         "workbookName" : "Planejamento.xslx",
@@ -505,7 +529,8 @@ def main():
         "observacao" : "2º treino adaptativo",
         "dataDeInicio" : "10/12/2022",
         "treinos" : treinos,
-        "tipoTreino" : 'Força'
+        "tipoTreino" : 'Força',
+        "posTreino": posTreino
     }
 
     sheet = WorksheetMaycao(args) 
@@ -514,6 +539,8 @@ def main():
     sheet.appendDadosAluno()
     sheet.stylesDadosAluno()
     sheet.appendExercicios()
+    sheet.appendPosTreino()
+    sheet.stylePosTreino()
     sheet.workbook.save(filename = "Carlos trieno.xlsx")
     
 
@@ -522,3 +549,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    print('\n\t\t',datetime.today().strftime('%A, %B %d, %Y %H:%M:%S'))

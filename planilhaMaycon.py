@@ -167,7 +167,7 @@ class WorksheetMaycao:
             self.worksheet[column + line].font = font
             self.worksheet[column + line].alignment = alignment
         
-                
+          
     def appendPosTreino(self):
         startingLine = self.lastLineOfEexercicio + 3;
         count = startingLine;

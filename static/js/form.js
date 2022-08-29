@@ -62,8 +62,8 @@ function handleList(){
         `
     })
 
-    
-    tbody.innerHTML += trInputs
+    treinoFields.innerHTML = ''
+    treinoFields.innerHTML += divInputs
     setEvent({
         event : 'click',
         callback : addExercicio, 
@@ -90,9 +90,29 @@ let trInputs = `
             <input class="form-control mb-2" name="descanso" type="text" placeholder="Descanso"require >
         </td>
         <td>
-            <button class="btn btn-secondary col" id="button-add-exercicio">Adicionar exercício</button>
+            <button class="btn btn-secondary col" id="button-add-exercicio">Adicionar</button>
         </td>
     </tr>
+`;
+
+let divInputs = `
+ <div class="row d-flex justify-content-center">
+     <div class="col">
+        <input class="form-control mb-2" name="nomeExercicio" type="text" placeholder="Nome do exercício">
+        <input class="form-control mb-2" name="linkVideo" type="text" placeholder="Link do vídeo">                       
+     </div>
+     <div class="col">
+        <input class="form-control mb-2" name="observacoes" type="text" placeholder="Observações">
+        <input class="form-control mb-2" name="repeticoes" type="number" placeholder="Repeticoes"require >            
+     </div>
+     <div class="col">
+        <input class="form-control mb-2" name="series" type="number" placeholder="Séries" require >
+        <input class="form-control mb-2" name="descanso" type="text" placeholder="Descanso"require >
+     </div>
+ </div>
+ <div class="row d-flex justify-content-center">
+     <button class="btn btn-success col" id="button-add-exercicio">Adicionar</button>
+ </div>
 `;
 
 

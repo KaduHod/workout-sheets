@@ -14,6 +14,7 @@ const addExercicioPosTreino = document.getElementById('add-exercicio-pos-treino'
 const setEvent = ({event, callback, target}) => target.addEventListener(event, callback)
 const tbody = document.getElementById('list-tBody')
 const listPosTreino = document.getElementById('pos-treino-lista')
+const treinoFields = document.getElementById('treinoFields')// para posicionar div com inputs
 
 
 

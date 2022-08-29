@@ -158,7 +158,7 @@ const PosTreino = {
         const list = posTreino.exercicios.reduce( (acc, {descricao, link}, i)=>{
             acc += `
                 <li class='row'> 
-                    <div class="col-1">
+                    <div class="col-5">
                         <a href='${link}'>${descricao}</a>
                     </div>
                     <div class="col-1">
@@ -191,5 +191,10 @@ const PosTreino = {
         </li>
         <li>
             <button class="btn btn-success" id="add-exercicio-pos-treino">Adicionar exercício</button> 
-        </li>`
+        </li>`,
+    removeExercico({target}){
+        const {exercicioIndex} = target.dataset
+        posTreino.exercicios = posTreino.exercicios.filter((e,i) => i !== parseInt(exercicioIndex))
+        PosTreino.mountList()
+    }
 }

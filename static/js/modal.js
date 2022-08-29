@@ -2,7 +2,8 @@ const treinoModal = new bootstrap.Modal(document.getElementById('treino-modal'),
     keyboard: false
 })
 const previewTreino = document.getElementById('preview-treino')
-    previewTreino.addEventListener('click', hanldeModal)
+      previewTreino.addEventListener('click', hanldeModal)
+
 const Modal = {
     setInfo({content, place}){
         place.innerHTML = content

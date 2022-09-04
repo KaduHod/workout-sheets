@@ -20,7 +20,13 @@ const init = () => {
         callback : PosTreino.handle, 
         target: addExercicioPosTreino
     })
+    setEvent({
+        event : 'click',
+        callback : Form.sendData,
+        target : gerar
+    })
 }
+
 init()
 
 function removeExercise({target}){
@@ -39,21 +45,18 @@ function addExercicio({target}){
     if(!error) return handleList();
 }
 
-function handlePosTreino({target}){
-    
-}
-
 function handleList(){
     const treinoIndex = weekDay.value
     const {exercicios} = treinos[treinoIndex] !== undefined ? treinos[treinoIndex] : Treino.createTreino({dia:treinoIndex});
     tbody.innerHTML = ''
-    exercicios.forEach( ({nomeExercicio, series, repeticoes, descanso, link}, i) => {
+    exercicios.forEach( ({nomeExercicio, series, repeticoes, descanso, link, carga}, i) => {
         tbody.innerHTML += `
             <tr>
                 <td>${i + 1}</td>
                 <td><a href='${link}'>${nomeExercicio}</a></td>
                 <td>${series}</td>
                 <td>${repeticoes}</td>
+                <td>${carga}</td>
                 <td>${descanso}</td>
                 <td>
                     <button data-week-day='${treinoIndex}' data-exercicio-index='${i}' class="btn btn-danger col remover-exercicio">Remover</button>
@@ -102,11 +105,12 @@ let divInputs = `
         <input class="form-control mb-2" name="linkVideo" type="text" placeholder="Link do vídeo">                       
      </div>
      <div class="col">
-        <input class="form-control mb-2" name="observacoes" type="text" placeholder="Observações">
-        <input class="form-control mb-2" name="repeticoes" type="number" placeholder="Repeticoes"require >            
+        <input class="form-control mb-2" name="series" type="number" placeholder="Séries" require >
+        <input class="form-control mb-2" name="repeticoes" type="number" placeholder="Repeticoes"require > 
+        <input class="form-control mb-2 " name="carga" type="number" placeholder="Carga (kg)" require >           
      </div>
      <div class="col">
-        <input class="form-control mb-2" name="series" type="number" placeholder="Séries" require >
+     <input class="form-control mb-2" name="observacoes" type="text" placeholder="Observações">
         <input class="form-control mb-2" name="descanso" type="text" placeholder="Descanso"require >
      </div>
  </div>

@@ -25,7 +25,7 @@ const Form = {
         })
     },
     exerciciosFields({fields}){
-        const names = ['nomeExercicio','weekDay','linkVideo', 'observacoes', 'series', 'repeticoes', 'descanso']
+        const names = ['nomeExercicio','weekDay','linkVideo', 'observacoes', 'series', 'repeticoes', 'descanso','carga']
         const verify = str => names.indexOf(str) > -1;
         return fields.filter( ({name}) => verify(name))
     },
@@ -34,9 +34,7 @@ const Form = {
         const verify = str => names.indexOf(str) > -1;
         return fields.filter( ({name}) => verify(name))
     },
-    addError(inputs){
-        inputs.forEach( input => input.classList.add('error-input') )
-    },
+    addError: (inputs) => inputs.forEach( ({input}) => input.classList.add('error-input')),
     posTreinoFields({fields}){
         const names = ['nomeExercicioPosTreino', 'linkExercicioPosTreino']
         const verify = str => names.indexOf(str) > -1;
@@ -44,6 +42,24 @@ const Form = {
     },
     verifyInputs(inputs){
         return inputs.filter( ({value}) => value == '')
+    },
+    sendData : async () => {
+        const body = Form.getDados()
+        if(!body) return;        
+        const headers = new Headers();
+                
+        const res = await fetch('http://localhost:5000/excel', {
+            method : 'POST',
+            headers,
+            body 
+        })
+        console.log(res)
+    },
+    getDados(){
+        const aluno = Aluno.dados()
+        console.log({aluno, treinos, posTreino})
+        if(!posTreino.exercicios.length || !treinos.length || !aluno) return false
+        return {aluno, treinos, posTreino}
     }
 }
 
@@ -77,7 +93,7 @@ const Treino = {
     setTableTreino({dia, exercicios}){
         const nameDia = Semana.getDia(dia)
         const trs = exercicios.reduce( (acc, exercicio, i)=> {
-            const {nomeExercicio,linkVideo,series,repeticoes,descanso,observacoes} = exercicio
+            const {nomeExercicio,linkVideo,series,repeticoes,descanso,observacoes, carga} = exercicio
             acc += `
             <tr>
                 <td> ${i + 1} </td>
@@ -86,6 +102,7 @@ const Treino = {
                 </td>
                 <td> ${series} </td>
                 <td> ${repeticoes} </td>
+                <td> ${carga} </td>
                 <td> ${descanso} </td>
                 <td> ${observacoes} </td>
             </tr>`
@@ -101,6 +118,7 @@ const Treino = {
                     <th scope="col">Exercício</th>
                     <th scope="col">Séries</th>
                     <th scope="col">Repeticoes</th>
+                    <th scope="col">Carga (kg)</th>
                     <th scope="col">Descanso</th>
                     <th scope="col">Observações</th>
                 </tr>
@@ -118,10 +136,9 @@ const Exercicio = {
     mountExercicio({fields}){
         fields.forEach( ({input}) => input.classList.remove('error-input') )
         const verify = Form.verifyInputs(fields)
+        
         if(verify.length) {
-            verify.forEach( ({input}) => {
-                Form.addError([input]) 
-            });
+            Form.addError(verify);
             return {error : true};
         }
         var weekday = null;
@@ -196,5 +213,21 @@ const PosTreino = {
         const {exercicioIndex} = target.dataset
         posTreino.exercicios = posTreino.exercicios.filter((e,i) => i !== parseInt(exercicioIndex))
         PosTreino.mountList()
+    }
+}
+
+const Aluno = {
+    dados(){
+        let fields = Form.getFields()
+        fields = Form.dadosAlunoFields({fields})
+        const verify = Form.verifyInputs(fields)
+        if(verify.lenght){
+            Form.addError(verify)
+            return false;
+        }
+        return fields.reduce( (acc, {name, value}) => {
+            acc[name] = value
+            return acc
+        }, {})
     }
 }

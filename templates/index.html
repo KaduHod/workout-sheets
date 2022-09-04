@@ -95,6 +95,7 @@
                                 <th scope="col">Exercício</th>
                                 <th scope="col">Séries</th>
                                 <th scope="col">Repeticoes</th>
+                                <th scope="col">Carga (kg)</th>
                                 <th scope="col">Descanso</th>
                                 <th scope="col">Ações</th>
                               </tr>
@@ -110,12 +111,13 @@
                                    <input class="form-control mb-2" name="linkVideo" type="text" placeholder="Link do vídeo">                       
                                 </div>
                                 <div class="col">
-                                   <input class="form-control mb-2" name="observacoes" type="text" placeholder="Observações">
-                                   <input class="form-control mb-2" name="repeticoes" type="number" placeholder="Repeticoes"require >            
+                                    <input class="form-control mb-2 " name="series" type="number" placeholder="Séries" require >
+                                    <input class="form-control mb-2" name="repeticoes" type="number" placeholder="Repeticoes"require >            
+                                    <input class="form-control mb-2 " name="carga" type="number" placeholder="Carga (kg)" require >
                                 </div>
                                 <div class="col">
-                                   <input class="form-control mb-2 " name="series" type="number" placeholder="Séries" require >
-                                   <input class="form-control mb-2" name="descanso" type="text" placeholder="Descanso"require >
+                                    <input class="form-control mb-2" name="observacoes" type="text" placeholder="Observações">
+                                    <input class="form-control mb-2" name="descanso" type="text" placeholder="Descanso"require >
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
@@ -146,6 +148,7 @@
                 </ul>
             </div>
         </div>
+        <button class="btn btn-success" id="gerar-treino">Gerar</button>
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>

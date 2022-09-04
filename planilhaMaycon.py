@@ -140,12 +140,12 @@ class WorksheetMaycao:
                 treinoEndingCelLineCopy = startingCelLine -1
 
 
-            self.worksheet.merge_cells('H' + str(treinoStartingCelLineCopy) + ':H' + str(columnNumber))
-            self.worksheet['H' + str(treinoStartingCelLineCopy)].alignment = Alignment(horizontal="center", vertical="center")
-            self.worksheet['H' + str(treinoStartingCelLineCopy)].fill = PatternFill("solid", fgColor="00333333")
+            self.worksheet.merge_cells('I' + str(treinoStartingCelLineCopy) + ':H' + str(columnNumber))
+            self.worksheet['I' + str(treinoStartingCelLineCopy)].alignment = Alignment(horizontal="center", vertical="center")
+            self.worksheet['I' + str(treinoStartingCelLineCopy)].fill = PatternFill("solid", fgColor="00333333")
             print('\tAdicionei um exercicio \n \n')
-            self.worksheet['H' + str(treinoStartingCelLineCopy)].font = Font(color='00FFFF00',size=20)
-            self.worksheet['H' + str(treinoStartingCelLineCopy)] = treino.dia  
+            self.worksheet['I' + str(treinoStartingCelLineCopy)].font = Font(color='00FFFF00',size=20)
+            self.worksheet['I' + str(treinoStartingCelLineCopy)] = treino.dia  
         self.lastLineOfEexercicio = int(columnNumber)     
 
     def styleExercicioRows(self, line) : 
@@ -159,14 +159,13 @@ class WorksheetMaycao:
         fill = PatternFill("solid", fgColor="00333333")
         font = Font(color='00FFFF00')
         alignment = Alignment(horizontal="center", vertical="center")
-        coluns = ['A','B','C','D','E','F','G', 'H']
+        coluns = ['A','B','C','D','E','F','G', 'H','I']
         
         for column in coluns:
             if(column != 'H'):
                 self.worksheet[column + line].fill = fill
             self.worksheet[column + line].font = font
-            self.worksheet[column + line].alignment = alignment
-        
+            self.worksheet[column + line].alignment = alignment 
           
     def appendPosTreino(self):
         startingLine = self.lastLineOfEexercicio + 3;
@@ -190,7 +189,6 @@ class WorksheetMaycao:
             img.anchor = cellLink
             self.worksheet.add_image(img)
             count = count + 1
-        print('\tAdicionei o pos trieno')
 
         return 1;
 
@@ -218,21 +216,8 @@ class WorksheetMaycao:
         self.worksheet.merge_cells('A' + str(startingLine) + ":C" + str(startingLine))
        
 
-class Exercicio: 
-    def __init__(self, args):
-        self.nomeExercicio = args["nomeExercicio"]
-        self.series        = args["series"]
-        self.repeticoes    = args["repeticoes"]
-        self.descanso      = args["descanso"]
-        self.linkVideo     = args["linkVideo"]
-        self.observacao    = args["observacao"]
 
-class Treino:
-    def __init__(self, args):
-        self.exercicios = args['exercicios'] 
-        self.dia = args['dia']
 
-        
 
 def main():
     exerciciosSegunda = {

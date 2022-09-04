@@ -5,10 +5,6 @@ from openpyxl import Workbook
 from openpyxl.drawing.image import Image
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Color, colors, Side, GradientFill, Alignment, Border, PatternFill
-# from exercicios import Exercicio
-# from treino import Treino
-
-
 
 class WorksheetMaycao:
     def __init__(self, args):
@@ -72,21 +68,16 @@ class WorksheetMaycao:
         self.worksheet['C3'].border = Border(left = Side(border_style="thick", color="00000000"))
         self.worksheet['C4'].border = Border(left = Side(border_style="thick", color="00000000"))
         self.worksheet['C5'].border = Border(left = Side(border_style="thick", color="00000000"))
-
-        
-
         self.worksheet['D2'].border = Border(right = Side(border_style="thick", color="00000000"))
         self.worksheet['D3'].border = Border(right = Side(border_style="thick", color="00000000"))
         self.worksheet['D4'].border = Border(right = Side(border_style="thick", color="00000000"))
         self.worksheet['D5'].border = Border(right = Side(border_style="thick", color="00000000"))
-
         self.worksheet['C6'].border = Border(left = Side(border_style="thick", color="00000000"),
                                             bottom = Side(border_style="thick", color="00000000"))
         self.worksheet['D1'].border = Border(top = Side(border_style="thick", color="00000000"),
                                             right = Side(border_style="thick", color="00000000"))
         self.worksheet['D6'].border = Border(right = Side(border_style="thick", color="00000000"),
-                                                        bottom = Side(border_style="thick", color="00000000"))
-
+                                            bottom = Side(border_style="thick", color="00000000"))
         count = 1
         while count < 7:
             cel = 'C' + str(count)
@@ -94,11 +85,9 @@ class WorksheetMaycao:
             self.worksheet[cel].fill = key_fill
             self.worksheet[cel].alignment = key_alignment
             count = count + 1
-
         value_font = Font(color='00000000', bold=True)
         value_fill = PatternFill("solid", fgColor="00FFFFFF")
         value_alignment = Alignment(horizontal="center", vertical="center")
-
         count = 1
         while count < 7:
             cel = 'D' + str(count)
@@ -110,7 +99,6 @@ class WorksheetMaycao:
     def appendExercicios(self):
         startingCelLine = 7
         columnNumber = str(startingCelLine)
-        
         for i, treino in enumerate(self.treinos):
             startingCelLine+= 1
             treinoStartingCelLineCopy = startingCelLine + 1
@@ -124,9 +112,7 @@ class WorksheetMaycao:
             self.worksheet['G' + columnNumber] = "VÍDEO"
             self.worksheet['H' + columnNumber] = "OBS"
             self.worksheet['I' + columnNumber] = "VOLUME"
-
             self.styleExercicioColumns(columnNumber)
-            
             for iExercicio, exercicio in enumerate(treino.exercicios):
                 startingCelLine+= 1
                 columnNumber = str(startingCelLine)
@@ -148,11 +134,7 @@ class WorksheetMaycao:
                 treinoEndingCelLineCopy = startingCelLine -1
                 warningErrorFormula = '\"Dados inválidos\"'
                 formulaSimples = f"=IFERROR(D{columnNumber}*C{columnNumber}*E{columnNumber},{warningErrorFormula})"
-
                 self.worksheet['I' + columnNumber].value = formulaSimples
-                
-
-
             self.worksheet.merge_cells('J' + str(treinoStartingCelLineCopy) + ':J' + str(columnNumber))
             self.worksheet['J' + str(treinoStartingCelLineCopy)].alignment = Alignment(horizontal="center", vertical="center")
             self.worksheet['J' + str(treinoStartingCelLineCopy)].fill = PatternFill("solid", fgColor="00333333")
@@ -165,7 +147,6 @@ class WorksheetMaycao:
         coluns = ['A','B','C','D','E','F','G', 'H','I','J']
         for column in coluns : 
             self.worksheet[column + line].alignment = alignment
-        # self.worksheet['I' + line].font = Font(color='00FFFF00',size=20)
 
     def styleExercicioColumns(self, line) :
         fill = PatternFill("solid", fgColor="00333333")
@@ -186,8 +167,6 @@ class WorksheetMaycao:
         endLine = startingLine + len(self.posTreino)
         titleCel = 'A' + str( startingLine - 1 )  
         self.worksheet[titleCel] = 'PÓS TREINO TODOS OS DIAS'
-        print(len(self.posTreino))
-        
         while count != endLine :
             cellCount = 'A' + str(count)
             cellNome  = 'B' + str(count) 
@@ -204,7 +183,6 @@ class WorksheetMaycao:
             img.anchor = cellLink
             self.worksheet.add_image(img)
             count = count + 1
-
         return 1;
 
     def stylePosTreino(self):

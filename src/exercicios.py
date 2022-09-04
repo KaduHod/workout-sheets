@@ -6,4 +6,4 @@ class Exercicio:
         self.carga         = args["carga"]
         self.descanso      = args["descanso"]
         self.linkVideo     = args["linkVideo"]
-        self.observacao    = args["observacao"]
+        self.observacao    = args["observacoes"]

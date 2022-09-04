@@ -517,6 +517,7 @@ def main():
         "tipoTreino" : 'Força',
         "posTreino": posTreino
     }
+    
 
     sheet = WorksheetMaycao(args) 
     sheet.createSheet()

@@ -90,7 +90,6 @@ class WorksheetMaycao:
         count = 1
         while count < 7:
             cel = 'C' + str(count)
-            print(cel)
             self.worksheet[cel].font = key_font
             self.worksheet[cel].fill = key_fill
             self.worksheet[cel].alignment = key_alignment
@@ -110,6 +109,7 @@ class WorksheetMaycao:
 
     def appendExercicios(self):
         startingCelLine = 7
+        columnNumber = str(startingCelLine)
         
         for i, treino in enumerate(self.treinos):
             startingCelLine+= 1
@@ -149,8 +149,6 @@ class WorksheetMaycao:
                 warningErrorFormula = '\"Dados inválidos\"'
                 formulaSimples = f"=IFERROR(D{columnNumber}*C{columnNumber}*E{columnNumber},{warningErrorFormula})"
 
-                print(formulaSimples)
-
                 self.worksheet['I' + columnNumber].value = formulaSimples
                 
 
@@ -158,7 +156,6 @@ class WorksheetMaycao:
             self.worksheet.merge_cells('J' + str(treinoStartingCelLineCopy) + ':J' + str(columnNumber))
             self.worksheet['J' + str(treinoStartingCelLineCopy)].alignment = Alignment(horizontal="center", vertical="center")
             self.worksheet['J' + str(treinoStartingCelLineCopy)].fill = PatternFill("solid", fgColor="00333333")
-            print('\tAdicionei um exercicio \n \n')
             self.worksheet['J' + str(treinoStartingCelLineCopy)].font = Font(color='00FFFF00',size=20)
             self.worksheet['J' + str(treinoStartingCelLineCopy)] = treino.dia   
         self.lastLineOfEexercicio = int(columnNumber)     
@@ -189,28 +186,28 @@ class WorksheetMaycao:
         endLine = startingLine + len(self.posTreino)
         titleCel = 'A' + str( startingLine - 1 )  
         self.worksheet[titleCel] = 'PÓS TREINO TODOS OS DIAS'
+        print(len(self.posTreino))
         
         while count != endLine :
             cellCount = 'A' + str(count)
             cellNome  = 'B' + str(count) 
             cellLink  = 'C' + str(count) 
             exercicio = self.posTreino[count - startingLine]
-            self.worksheet[cellCount] = count - startingLine - 1
-            self.worksheet[cellNome] = exercicio['nome']
-            self.worksheet[cellLink].hyperlink = exercicio['link']
-            self.worksheet[cellLink].value = ''
+            self.worksheet[cellCount] = count - startingLine + 1
+            self.worksheet[cellNome] = exercicio['descricao']
+            print('aqui')
+            print(exercicio['link'])
+            self.worksheet[cellLink].value = f"=HYPERLINK(\"{exercicio['link']}\",\"\")"
             img = openpyxl.drawing.image.Image('./img/ytb.png')
             img.width = 20
             img.height = 20
             img.anchor = cellLink
             self.worksheet.add_image(img)
             count = count + 1
-        print('\tAdicionei o pos trieno')
 
         return 1;
 
     def stylePosTreino(self):
-        print('aqui')
         startingLine = self.lastLineOfEexercicio + 2;
         count = startingLine
         endLine = startingLine + 1 + len(self.posTreino)

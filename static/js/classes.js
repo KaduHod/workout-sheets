@@ -30,7 +30,7 @@ const Form = {
         return fields.filter( ({name}) => verify(name))
     },
     dadosAlunoFields({fields}){
-        const names = ['nomeAluno', 'objetivo', 'dataInicio', 'diaDaSemana', 'observacao', 'tipoTreino']
+        const names = ['nomeAluno', 'objetivo', 'dataDeInicio', 'diasDaSemana', 'observacao', 'tipoTreino']
         const verify = str => names.indexOf(str) > -1;
         return fields.filter( ({name}) => verify(name))
     },
@@ -43,23 +43,21 @@ const Form = {
     verifyInputs(inputs){
         return inputs.filter( ({value}) => value == '')
     },
-    sendData : async () => {
+    sendData : async (event) => {
         const body = Form.getDados()
         if(!body) return;        
-        const headers = new Headers();
                 
         const res = await fetch('http://localhost:5000/excel', {
             method : 'POST',
-            headers,
-            body 
+            headers : {'content-type': 'application/json'},
+            body : JSON.stringify(body) 
         })
-        console.log(res)
+        download.click()
     },
     getDados(){
         const aluno = Aluno.dados()
-        console.log({aluno, treinos, posTreino})
         if(!posTreino.exercicios.length || !treinos.length || !aluno) return false
-        return {aluno, treinos, posTreino}
+        return {...aluno, treinos, posTreino :posTreino.exercicios }
     }
 }
 

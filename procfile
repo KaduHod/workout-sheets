@@ -1,1 +1,1 @@
-web: gunicorn server index
+web: gunicorn py -m flask --app server run
